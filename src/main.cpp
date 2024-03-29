@@ -9,6 +9,7 @@
 #include "route_planner.h"
 
 using namespace std::experimental;
+using namespace std;
 
 static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
 {   
@@ -55,12 +56,26 @@ int main(int argc, const char **argv)
     // TODO 1: Declare floats `start_x`, `start_y`, `end_x`, and `end_y` and get
     // user input for these values using std::cin. Pass the user input to the
     // RoutePlanner object below in place of 10, 10, 90, 90.
+    float start_x;
+    float start_y;
+    float end_x;
+    float end_y;
+    
+    cout << "Choose start x coordinate: ";
+    cin >> start_x;
+    cout << "Choose start y coordinate: ";
+    cin >> start_y;
+    cout << "Choose end x coordinate: ";
+    cin >> end_x;
+    cout << "Choose end y coordinate: ";
+    cin >> end_y;
 
     // Build Model.
     RouteModel model{osm_data};
 
     // Create RoutePlanner object and perform A* search.
-    RoutePlanner route_planner{model, 10, 10, 90, 90};      // starting point -> (10, 10)       ending point -> (90, 90)
+    //RoutePlanner route_planner{model, 10, 10, 90, 90};      // starting point -> (10, 10)       ending point -> (90, 90)      ORIGINAL CODE
+    RoutePlanner route_planner{model, start_x, start_y, end_x, end_y};      // starting point -> (start_x, start_y)       ending point -> (end_x, end_y)      MY CODE
     route_planner.AStarSearch();
 
     std::cout << "Distance: " << route_planner.GetDistance() << " meters. \n";
