@@ -1,5 +1,8 @@
 #include "route_planner.h"
+#include "route_model.h"
 #include <algorithm>
+
+using namespace std;
 
 RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, float end_x, float end_y): m_Model(model) {
     // Convert inputs to percentage:
@@ -40,10 +43,10 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 
     for (int i = 0; i < 4; i++)     // loops through current node's potential neighbors     goes up to 4 for north, south, east, and west sides
     {
-        auto search_node = FindNeighbors();
+        auto search_node = Model::Node FindNeighbors(*current_node);
 
         auto g_2 = g + 1;
-        auto h = CalculateHValue();
+        auto h = CalculateHValue(current_node);
 
         open_list.push_back(search_node);
     }
@@ -59,7 +62,19 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 // - Return the pointer.
 
 RouteModel::Node *RoutePlanner::NextNode() {
+    bool Compare(const vector<int> node_1, const vector<int> node_2)    // compares f-values of two nodes
+    {
+        auto f_1 = node_1[2] + node_1[3];   // f_1 = g_1 + h_1
+        auto f_2 = node_2[2] + node_2[3];   // f_1 = g_2 + h_2
+        return f_1 > f_2;
+    }
+    sort(open_list->begin(), open_list->end(), Compare);    // sorts two-dimensional vector of ints in DESCENDING order useing Compare function to determine sorting order
 
+    int* low_sum_node = &open_list->end();  // pointer to the node in the list with the lowest sum
+
+    open_list.pop_back(*low_sum_node);
+
+    return *low_sum_node;
 }
 
 
