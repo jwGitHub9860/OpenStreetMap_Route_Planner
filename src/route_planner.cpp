@@ -43,7 +43,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 
     for (int i = 0; i < 4; i++)     // loops through current node's potential neighbors     goes up to 4 for north, south, east, and west sides
     {
-        auto search_node = Model::Node FindNeighbors(*current_node);
+        auto search_node = Model::Node FindNeighbors(current_node);
 
         auto g_2 = g + 1;
         auto h = CalculateHValue(current_node);
