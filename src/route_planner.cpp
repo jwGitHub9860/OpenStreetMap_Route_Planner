@@ -72,11 +72,11 @@ RouteModel::Node *RoutePlanner::NextNode() {
     }
     sort(open_list->begin(), open_list->end(), Compare);    // sorts two-dimensional vector of ints in DESCENDING order useing Compare function to determine sorting order
 
-    int* low_sum_node = &open_list->end();  // pointer to the node in the list with the lowest sum
+    RouteModel::Node* low_sum_node = &open_list->end();  // pointer to the node in the list with the lowest sum
 
-    open_list.pop_back(*low_sum_node);
+    open_list.pop_back(&low_sum_node);
 
-    return *low_sum_node;
+    return low_sum_node;
 }
 
 
