@@ -24,7 +24,9 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 // - Node objects have a distance method to determine the distance to another node.
 
 float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
-    return abs(&start_node[0] - &end_node[0]) + abs(&start_node[1] - &end_node[1]);     // Manhattan Distance (h) = | x 1 − x 2 | + | y 1 − y 2 |
+    //return abs(&start_node[0] - &end_node[0]) + abs(&start_node[1] - &end_node[1]);     // Manhattan Distance (h) = | x 1 − x 2 | + | y 1 − y 2 |
+
+    return sqrt(pow((&node[0] - &end_node[0]), 2) + pow((&node[1] - &end_node[1]), 2));     // Distance Formula (h) = sqrt( ( x_2 − x_1 )^2 + ( y_2 − y_1 )^2 )
 }
 
 
@@ -39,14 +41,14 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
     const int delta[4][2]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}}    // directional deltas
     
     // current node data    (parent nodes)
-    auto x = &current_node->neighbors[0];
-    auto y = &current_node->neighbors[1];
-    auto g = &current_node->neighbors[2];   // g_value
-
-    current_node->FindNeighbors();     // (pointer_name)->(variable_name)        fills "current_node.neighbors" vector with neighbors       DON'T KNOW HOW MANY NEIGHBORS EACH NODE HAS
+    RouteModel::Node** x = &current_node->neighbors[0];
+    RouteModel::Node** y = &current_node->neighbors[1];
+    RouteModel::Node** g = &current_node->neighbors[2];   // g_value
 
     for (auto neighbor : current_node->neighbors)     // loops through current node's potential neighbors     goes up to 4 for north, south, east, and west sides
     {
+        current_node->FindNeighbors();     // (pointer_name)->(variable_name)        fills "current_node.neighbors" vector with neighbors       DON'T KNOW HOW MANY NEIGHBORS EACH NODE HAS
+        
         auto g_2 = g + 1;
         auto h = CalculateHValue(current_node);
 
