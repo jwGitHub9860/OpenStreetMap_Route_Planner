@@ -49,8 +49,8 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
     {
         current_node->FindNeighbors();     // (pointer_name)->(variable_name)        fills "current_node.neighbors" vector with neighbors       DON'T KNOW HOW MANY NEIGHBORS EACH NODE HAS
         
-        auto g_2 = g + 1;
-        auto h = CalculateHValue(current_node);
+        RouteModel::Node** g_2 = g + 1;
+        float h = CalculateHValue(current_node);
 
         open_list.push_back(current_node);
     }
@@ -114,5 +114,8 @@ void RoutePlanner::AStarSearch() {
     RouteModel::Node *current_node = nullptr;
 
     // TODO: Implement your solution here.
-
+    AddNeighbors(*current_node);
+    NextNode();
+    auto final_path = ConstructFinalPath(*current_node);
+    m_Model.path(final_path);
 }
