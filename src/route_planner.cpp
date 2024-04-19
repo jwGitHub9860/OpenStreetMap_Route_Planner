@@ -65,18 +65,19 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 // - Remove that node from the open_list.
 // - Return the pointer.
 
+bool Compare(RouteModel::Node* node_1, RouteModel::Node* node_2)    // compares f-values of two nodes
+{
+    float f_1 = node_1->g_value + node_1->h_value;   // f_1 = g_1 + h_1
+    float f_2 = node_2->g_value + node_2->h_value;   // f_1 = g_2 + h_2
+    return f_1 > f_2;
+}
+
 RouteModel::Node *RoutePlanner::NextNode() {
-    bool Compare(const vector<int> node_1, const vector<int> node_2)    // compares f-values of two nodes
-    {
-        auto f_1 = node_1[2] + node_1[3];   // f_1 = g_1 + h_1
-        auto f_2 = node_2[2] + node_2[3];   // f_1 = g_2 + h_2
-        return f_1 > f_2;
-    }
     sort(open_list->begin(), open_list->end(), Compare);    // sorts two-dimensional vector of ints in DESCENDING order useing Compare function to determine sorting order
 
-    RouteModel::Node* low_sum_node = &open_list->end();  // pointer to the node in the list with the lowest sum
+    RouteModel::Node* low_sum_node = &open_list.back();  // WANT LAST ELEMENT (pointer to node in list with LOWEST SUM)          'end()' - returns POINTER          'back()' - returns LAST ELEMENT
 
-    open_list.pop_back(&low_sum_node);
+    open_list.pop_back(&low_sum_node);      // DON'T PUT ANYTHING IN () OF pop_back() since it ALWAYS deletes the LAST element of the list
 
     return low_sum_node;
 }
