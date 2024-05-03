@@ -127,7 +127,7 @@ void RoutePlanner::AStarSearch() {
     RouteModel::Node *current_node = nullptr;   // initializes *current_node
 
     // TODO: Implement your solution here.
-    open_list{};    // HOLDS ALL NODES (ALREADY HAS NODES IN IT) intialize?
+    open_list{};    // HOLDS ALL NODES (ALREADY HAS NODES IN IT) intialize vector list?
     //vector<vector<int>> open_nodes_list{};  // JUST IN CASE
 
     // starting node    JUST IN CASE (maybe)
@@ -140,12 +140,9 @@ void RoutePlanner::AStarSearch() {
 
     while (open_list.size() > 0)   // checks if open_list vector is NOT EMPTY
     {
-        RouteModel::Node* next_node = NextNode();     // sorts "open_list{}" & returns next node
+        current_node = NextNode();     // sorts "open_list{}" & returns next node
 
-        RouteModel::Node* x = &next_node[0];    // obtains x value from "next_node"
-        RouteModel::Node* y = &next_node[1];    // obtains y value from "next_node"
-
-        if (x == &end_node[0] && y == &end_node[1])  // CHECKS IF GOAL WAS REACHED
+        if (current_node->distance(*end_node) == 0)  // CHECKS IF GOAL WAS REACHED        using distance (equation) between current_node and end_node
         {
             m_Model.path = ConstructFinalPath(current_node);    // stores final path in m_Model.path
             return ConstructFinalPath(end_node);   // returns FINAL PATH & Exits while loop
