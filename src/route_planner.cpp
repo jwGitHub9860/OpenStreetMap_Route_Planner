@@ -41,7 +41,7 @@ float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
 // - For each node in current_node.neighbors, add the neighbor to open_list and set the node's visited attribute to true.
 
 void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
-    const int delta[4][2]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};    // directional deltas
+    //const int delta[4][2]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};    // directional deltas
     
     // current node data    (parent nodes)
     RouteModel::Node** x = &current_node->neighbors[0];
