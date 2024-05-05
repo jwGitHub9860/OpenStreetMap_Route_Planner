@@ -15,6 +15,8 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
     // Store the nodes you find in the RoutePlanner's start_node and end_node attributes.
     *start_node = m_Model.FindClosestNode(start_x, start_y);
     *end_node = m_Model.FindClosestNode(end_x, end_y);
+    /*m_Model.FindClosestNode(start_x, start_y);
+    m_Model.FindClosestNode(end_x, end_y);*/
 }
 
 
@@ -24,12 +26,7 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 // - Node objects have a distance method to determine the distance to another node.
 
 float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
-    //return abs(&start_node[0] - &end_node[0]) + abs(&start_node[1] - &end_node[1]);     // Manhattan Distance (h) = | x 1 − x 2 | + | y 1 − y 2 |
-    //return sqrt(pow((&node[0] - &end_node[0]), 2) + pow((&node[1] - &end_node[1]), 2));     // Distance Formula (h) = sqrt( ( x_2 − x_1 )^2 + ( y_2 − y_1 )^2 )
-
-    return (*node).distance(*end_node);     // ACCESSES Distance Formula (h) = sqrt( ( x_2 − x_1 )^2 + ( y_2 − y_1 )^2 )
-    //return node->distance(*end_node);     // ACCESSES Distance Formula (h) = sqrt( ( x_2 − x_1 )^2 + ( y_2 − y_1 )^2 )
-    //return node->distance(end_node);     // ACCESSES Distance Formula (h) = sqrt( ( x_2 − x_1 )^2 + ( y_2 − y_1 )^2 )
+    return (*node).distance(*end_node);     // ACCESSES Distance Formula (h) = sqrt( ( x_2 − x_1 )^2 + ( y_2 − y_1 )^2 )           -> - FOR POINTERS       . - FOR ACTUAL VALUE ITSELF     --->    Do NOT use "node->distance(*end_node)"
 }
 
 
@@ -74,9 +71,9 @@ bool Compare(RouteModel::Node* node_1, RouteModel::Node* node_2)    // compares 
 }
 
 RouteModel::Node *RoutePlanner::NextNode() {
-    sort(open_list->begin(), open_list->end(), Compare);    // sorts two-dimensional vector of ints in DESCENDING order useing Compare function to determine sorting order
+    sort(open_list.begin(), open_list.end(), Compare);    // sorts two-dimensional vector of ints in DESCENDING order useing Compare function to determine sorting order           -> - FOR POINTERS       . - FOR ACTUAL VALUE ITSELF
 
-    RouteModel::Node* low_sum_node = &open_list.back();  // WANT LAST ELEMENT (pointer to node in list with LOWEST SUM)          'end()' - returns POINTER          'back()' - returns LAST ELEMENT
+    RouteModel::Node* low_sum_node = open_list.back();  // WANT LAST ELEMENT (pointer to node in list with LOWEST SUM)          'end()' - returns POINTER          'back()' - returns LAST ELEMENT
 
     open_list.pop_back();      // DON'T PUT ANYTHING IN () OF pop_back() since it ALWAYS deletes the LAST element of the list
 
@@ -98,12 +95,10 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     std::vector<RouteModel::Node> path_found;
 
     // TODO: Implement your solution here.
-    //auto final_node = *current_node + i;     // NOTE (delete later)
     while (current_node != start_node)  // iterate through nodes until start_node
     {
         path_found.push_back(*current_node);
         current_node = (*current_node).parent;  // changes "current_node" to "parent_node"
-        //current_node->distance();
 
         distance += (*current_node).distance(*((*current_node).parent))  // adds distance from node to parent to "distance"
     }
@@ -124,14 +119,12 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
 // - Store the final path in the m_Model.path attribute before the method exits. This path will then be displayed on the map tile.
 
 void RoutePlanner::AStarSearch() {
-    RouteModel::Node *current_node = nullptr;   // initializes *current_node
+    RouteModel::Node *current_node = nullptr;   // initializes *current_node		'open_list' vector ALREADY INTIALIZED
 
     // TODO: Implement your solution here.
-    open_list{};    // HOLDS ALL NODES (ALREADY HAS NODES IN IT) intialize vector list?
-    //vector<vector<int>> open_nodes_list{};  // JUST IN CASE
 
-    // starting node    JUST IN CASE (maybe)
-    /*int x = start_x;
+    /* starting node    JUST IN CASE (maybe)
+    int x = start_x;
     int y = start_y;
     int g = 0;
     int h = CalculateHValue(*current_node);   // JUST IN CASE (maybe)*/
@@ -145,7 +138,7 @@ void RoutePlanner::AStarSearch() {
         if (current_node->distance(*end_node) == 0)  // CHECKS IF GOAL WAS REACHED        using distance (equation) between current_node and end_node
         {
             m_Model.path = ConstructFinalPath(current_node);    // stores final path in m_Model.path
-            return ConstructFinalPath(end_node);   // returns FINAL PATH & Exits while loop
+            ConstructFinalPath(end_node);   // returns FINAL PATH & Exits while loop
         }
         
     }
