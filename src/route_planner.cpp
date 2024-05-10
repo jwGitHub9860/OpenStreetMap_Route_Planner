@@ -138,7 +138,8 @@ void RoutePlanner::AStarSearch() {
         if (current_node->distance(*end_node) == 0)  // CHECKS IF GOAL WAS REACHED        using distance (equation) between current_node and end_node
         {
             m_Model.path = ConstructFinalPath(current_node);    // stores final path in m_Model.path
-            ConstructFinalPath(end_node);   // returns FINAL PATH & Exits while loop
+            ConstructFinalPath(end_node);   // returns FINAL PATH
+            break;      // Exits while loop
         }
         
     }
