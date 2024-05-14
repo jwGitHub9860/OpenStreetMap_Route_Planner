@@ -123,13 +123,15 @@ void RoutePlanner::AStarSearch() {
 
     // TODO: Implement your solution here.
 
-    /* starting node    JUST IN CASE (maybe)
+    /* starting node (visited)    JUST IN CASE (maybe)
     int x = start_x;
     int y = start_y;
     int g = 0;
-    int h = CalculateHValue(*current_node);   // JUST IN CASE (maybe)*/
+    int h = CalculateHValue(*current_node);   /* JUST IN CASE (maybe)*/
     
-    AddNeighbors(current_node);    // CHECKS IF GOAL WAS REACHED (maybe?)
+    AddNeighbors(start_node);      // starting node (visited) & adds "start_node" to "open_list"
+
+    AddNeighbors(current_node);    // starting node (visited) & adds "start_node" to "open_list"        CHECKS IF GOAL WAS REACHED (maybe?)
 
     while (open_list.size() > 0)   // checks if open_list vector is NOT EMPTY
     {
