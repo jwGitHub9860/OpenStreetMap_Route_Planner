@@ -53,6 +53,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
         float h = CalculateHValue(current_node);
 
         open_list.push_back(current_node);
+        current_node->visited;      // MARKS node as visited
     }
     
 }
@@ -98,9 +99,9 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     while (current_node != start_node)  // iterate through nodes until start_node
     {
         path_found.push_back(*current_node);
-        current_node = (*current_node).parent;  // changes "current_node" to "parent_node"
 
         distance += (*current_node).distance(*((*current_node).parent))  // adds distance from node to parent to "distance"
+        current_node = (*current_node).parent;  // changes "current_node" to "parent_node"
     }
     
     reverse(open_list.begin(), open_list.end());    // reverse vector
@@ -121,17 +122,10 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
 void RoutePlanner::AStarSearch() {
     RouteModel::Node *current_node = nullptr;   // initializes *current_node		'open_list' vector ALREADY INTIALIZED
 
-    // TODO: Implement your solution here.
+    // TODO: Implement your solution here.    
+    AddNeighbors(start_node);      // MARKS starting node (visited) & ADDS "start_node" to "open_list"
 
-    /* starting node (visited)    JUST IN CASE (maybe)
-    int x = start_x;
-    int y = start_y;
-    int g = 0;
-    int h = CalculateHValue(*current_node);   /* JUST IN CASE (maybe)*/
-    
-    AddNeighbors(start_node);      // starting node (visited) & adds "start_node" to "open_list"
-
-    AddNeighbors(current_node);    // starting node (visited) & adds "start_node" to "open_list"        CHECKS IF GOAL WAS REACHED (maybe?)
+    AddNeighbors(current_node);    // MARKS current node (visited) & ADDS "current_node" to "open_list"        CHECKS IF GOAL WAS REACHED (maybe?)
 
     while (open_list.size() > 0)   // checks if open_list vector is NOT EMPTY
     {
@@ -139,8 +133,7 @@ void RoutePlanner::AStarSearch() {
 
         if (current_node->distance(*end_node) == 0)  // CHECKS IF GOAL WAS REACHED        using distance (equation) between current_node and end_node
         {
-            m_Model.path = ConstructFinalPath(current_node);    // stores final path in m_Model.path
-            ConstructFinalPath(end_node);   // returns FINAL PATH
+            m_Model.path.push_back(ConstructFinalPath(end_node));    // stores final path in m_Model.path & returns FINAL PATH
             break;      // Exits while loop
         }
         
