@@ -137,7 +137,6 @@ void RoutePlanner::AStarSearch() {
             break;      // Exits while loop
         }
         
+        AddNeighbors(current_node);    // ALSO checks other nodes (maybe?)
     }
-    
-    AddNeighbors(current_node);    // ALSO checks other nodes (maybe?)
 }
