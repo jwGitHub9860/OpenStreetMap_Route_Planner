@@ -43,7 +43,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
     for (auto neighbor : current_node->neighbors)     // loops through current node's potential neighbors     goes up to 4 for north, south, east, and west sides
     {
         neighbor->parent = current_node;    // sets parent node
-        neighbor->g_value = current_node->g_value + neighbor->distance(*neighbor);      // sets g_value         g_2 = g + 1
+        neighbor->g_value = current_node->g_value + current_node->distance(*neighbor);      // sets g_value         g_2 = g + 1
         neighbor->h_value = CalculateHValue(neighbor);      // sets h_value
 
         open_list.push_back(current_node);      // ADDS "current_node" to "open_list"
