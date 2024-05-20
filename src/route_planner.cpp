@@ -47,9 +47,8 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
         neighbor->h_value = CalculateHValue(neighbor);      // sets h_value
 
         open_list.push_back(current_node);      // ADDS "current_node" to "open_list"
-        current_node->visited = true;      // MARKS node as visited (true)
+        neighbor->visited = true;      // MARKS node as visited (true)
     }
-    
 }
 
 
