@@ -38,22 +38,16 @@ float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
 // - For each node in current_node.neighbors, add the neighbor to open_list and set the node's visited attribute to true.
 
 void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
-    //const int delta[4][2]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};    // directional deltas JUST IN CASE
-    
-    // current node data    (parent nodes)
-    RouteModel::Node** x = &current_node->neighbors[0];
-    RouteModel::Node** y = &current_node->neighbors[1];
-    RouteModel::Node** g = &current_node->neighbors[2];   // g_value
+    current_node->FindNeighbors();     // (pointer_name)->(variable_name)        fills "current_node.neighbors" vector with neighbors       DON'T KNOW HOW MANY NEIGHBORS EACH NODE HAS
 
     for (auto neighbor : current_node->neighbors)     // loops through current node's potential neighbors     goes up to 4 for north, south, east, and west sides
     {
-        current_node->FindNeighbors();     // (pointer_name)->(variable_name)        fills "current_node.neighbors" vector with neighbors       DON'T KNOW HOW MANY NEIGHBORS EACH NODE HAS
-        
-        RouteModel::Node** g_2 = g + 1;
-        float h = CalculateHValue(current_node);
+        neighbor->parent = current_node;    // sets parent node
+        neighbor->g_value = current_node->g_value + neighbor->distance(*neighbor);      // sets g_value         g_2 = g + 1
+        neighbor->h_value = CalculateHValue(neighbor);      // sets h_value
 
-        open_list.push_back(current_node);
-        current_node->visited;      // MARKS node as visited
+        open_list.push_back(current_node);      // ADDS "current_node" to "open_list"
+        current_node->visited = true;      // MARKS node as visited (true)
     }
     
 }
@@ -137,6 +131,6 @@ void RoutePlanner::AStarSearch() {
             break;      // Exits while loop
         }
         
-        AddNeighbors(current_node);    // ALSO checks other nodes (maybe?)
+        AddNeighbors(current_node);    // if goal NOT REACHED, checks next node
     }
 }
