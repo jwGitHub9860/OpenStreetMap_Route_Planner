@@ -2,6 +2,7 @@
 #include "route_model.h"
 #include <algorithm>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
