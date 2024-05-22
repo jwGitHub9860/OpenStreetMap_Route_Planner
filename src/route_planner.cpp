@@ -26,7 +26,7 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 // - Node objects have a distance method to determine the distance to another node.
 
 float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
-    return (*node).distance(*end_node);     // ACCESSES Distance Formula (h) = sqrt( ( x_2 − x_1 )^2 + ( y_2 − y_1 )^2 )           -> - FOR POINTERS       . - FOR ACTUAL VALUE ITSELF     --->    Do NOT use "node->distance(*end_node)"
+    return node->distance(*end_node);     // ACCESSES Distance Formula (h) = sqrt( ( x_2 − x_1 )^2 + ( y_2 − y_1 )^2 )           -> - FOR POINTERS       . - FOR ACTUAL VALUE ITSELF     --->    Do NOT use "node->distance(*end_node)"
 }
 
 
@@ -46,7 +46,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
         neighbor->g_value = current_node->g_value + current_node->distance(*neighbor);      // sets g_value         g_2 = g + 1
         neighbor->h_value = CalculateHValue(neighbor);      // sets h_value
 
-        open_list.emplace_back(current_node);      // ADDS "current_node" to "open_list"        'emplace_back()' adds node DIRECTLY into container
+        open_list.emplace_back(neighbor);      // ADDS "current_node" to "open_list"        'emplace_back()' adds node DIRECTLY into container
         neighbor->visited = true;      // MARKS node as visited (true)
     }
 }
