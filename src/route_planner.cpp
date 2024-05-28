@@ -90,7 +90,7 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     std::vector<RouteModel::Node> path_found;
 
     // TODO: Implement your solution here.
-    while (current_node->parent != nullptr)  // iterate through nodes until start_node   INCLUDING "start_node" INTO PATH (do NOT use != start_node ---> will NOT INCLUDE "start_node" into path)
+    while (current_node->parent != start_node)  // iterate through nodes until start_node
     {
         path_found.emplace_back(*current_node);        // 'emplace_back()' adds node DIRECTLY into "path_found" vector
 
