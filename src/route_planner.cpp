@@ -47,7 +47,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
         neighbor->g_value = current_node->g_value + current_node->distance(*neighbor);      // sets g_value         g_2 = g + 1
         neighbor->h_value = CalculateHValue(neighbor);      // sets h_value
 
-        open_list.emplace_back(neighbor);      // ADDS "current_node" to "open_list"        'emplace_back()' adds node DIRECTLY into container
+        open_list.push_back(neighbor);      // ADDS "current_node" to "open_list"        'push_back()' adds EXISTING node into container        'emplace_back()' CREATES NEW node & adds Directly into container
         neighbor->visited = true;      // MARKS node as visited (true)
     }
 }
@@ -92,7 +92,7 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     // TODO: Implement your solution here.
     while (current_node->parent != start_node)  // iterate through nodes until start_node
     {
-        path_found.emplace_back(*current_node);        // 'emplace_back()' adds node DIRECTLY into "path_found" vector
+        path_found.push_back(*current_node);        // 'push_back()' adds EXISTING node into container        'emplace_back()' adds node DIRECTLY into "path_found" vector
 
         distance += (*current_node).distance(*(current_node->parent));  // adds distance from node to parent to "distance"
         current_node = current_node->parent;  // changes "current_node" VALUE to "parent_node" VALUE
