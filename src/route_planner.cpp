@@ -41,7 +41,7 @@ float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
 void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
     current_node->FindNeighbors();     // (pointer_name)->(variable_name)        fills "current_node.neighbors" vector with neighbors       DON'T KNOW HOW MANY NEIGHBORS EACH NODE HAS
 
-    for (auto neighbor : current_node->neighbors)     // loops through current node's potential neighbors     goes up to 4 for north, south, east, and west sides
+    for (RouteModel::Node* neighbor : current_node->neighbors)     // loops through current node's potential neighbors     Either: NEVER USE "auto" ---> (Must Be Specific) or Put Type BEFORE "auto"     goes up to 4 for north, south, east, and west sides
     {
         neighbor->parent = current_node;    // sets parent node
         neighbor->g_value = current_node->g_value + current_node->distance(*neighbor);      // sets g_value         g_2 = g + 1
