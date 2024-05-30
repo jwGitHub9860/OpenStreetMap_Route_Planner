@@ -90,13 +90,17 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     std::vector<RouteModel::Node> path_found;
 
     // TODO: Implement your solution here.
-    while (current_node->parent != start_node)  // iterate through nodes until start_node
-    {
-        path_found.push_back(*current_node);        // 'push_back()' adds EXISTING node into container        'emplace_back()' adds node DIRECTLY into "path_found" vector
+    RouteModel::Node *c = current_node;
 
-        distance += (*current_node).distance(*(current_node->parent));  // adds distance from node to parent to "distance"
-        current_node = current_node->parent;  // changes "current_node" VALUE to "parent_node" VALUE
+    while (c != start_node)  // iterate through nodes (current_node) until start_node        start_node is a POINTER        MUST COMPARE "POINTER" WITH "POINTER"
+    {
+        path_found.emplace_back(*c);        // adds "current_node" ITSELF to "path_found"        'emplace_back()' adds NEW node DIRECTLY into "path_found" vector        'push_back()' adds EXISTING node into container        line meaning ---> path_found.push_back(current_node);
+
+        distance += c->distance(c->parent);  // adds distance from node to parent to "distance"        current_node LOCATION -> parent
+        c = c->parent;  // changes "current_node" LOCATION to "parent_node" LOCATION
     }
+
+    path_found.push_back(*c);        // adds EXISTING "current_nodes" to "path_found"        'push_back()' adds EXISTING node into container        'emplace_back()' adds NEW node DIRECTLY into "path_found" vector        line meaning ---> path_found.push_back(current_node);
     
     reverse(path_found.begin(), path_found.end());    // reverse "PATH_FOUND" vector
 
