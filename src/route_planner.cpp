@@ -136,3 +136,5 @@ void RoutePlanner::AStarSearch() {
         }
     }
 }
+
+// help was recieved by users Thuong-ironman, Paulo, Kathy L, Sriteja M, Dohyeong, and Nayir
