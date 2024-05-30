@@ -85,18 +85,18 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     std::vector<RouteModel::Node> path_found;
 
     // TODO: Implement your solution here.
-    RouteModel::Node *c = current_node;
+    RouteModel::Node *c_n = current_node;
 
-    while (c != start_node)  // iterate through nodes (current_node) until start_node        start_node is a POINTER        MUST COMPARE "POINTER" WITH "POINTER"
+    while (c_n != start_node)  // iterate through nodes (current_node) until start_node        start_node is a POINTER        MUST COMPARE "POINTER" WITH "POINTER"
     {
-        path_found.emplace_back(*c);        // adds "current_node" ITSELF to "path_found"        'emplace_back()' adds NEW node DIRECTLY into "path_found" vector        'push_back()' adds EXISTING node into container        line meaning ---> path_found.push_back(current_node);
-        RouteModel::Node *p = c->parent;    // puts 'c->parent' into POINTER        current_node LOCATION -> parent
+        path_found.emplace_back(*c_n);        // adds "current_node" ITSELF to "path_found"        'emplace_back()' adds NEW node DIRECTLY into "path_found" vector        'push_back()' adds EXISTING node into container        line meaning ---> path_found.push_back(current_node);
+        RouteModel::Node *par_c_n = c_n->parent;    // puts 'c->parent' into POINTER        current_node LOCATION -> parent
 
-        distance += c->distance(*p);  // adds distance from node to parent to "distance"        'distance()' will ONLY take Pointer, NOT take 'c->parent'
-        c = c->parent;  // changes "current_node" LOCATION to "parent_node" LOCATION
+        distance += c_n->distance(*par_c_n);  // adds distance from node to parent to "distance"        'distance()' will ONLY take Pointer, NOT take 'c->parent'
+        c_n = c_n->parent;  // changes "current_node" LOCATION to "parent_node" LOCATION
     }
 
-    path_found.push_back(*c);        // adds EXISTING "current_nodes" to "path_found"        'push_back()' adds EXISTING node into container        'emplace_back()' adds NEW node DIRECTLY into "path_found" vector        line meaning ---> path_found.push_back(current_node);
+    path_found.push_back(*c_n);        // adds EXISTING "current_nodes" to "path_found"        'push_back()' adds EXISTING node into container        'emplace_back()' adds NEW node DIRECTLY into "path_found" vector        line meaning ---> path_found.push_back(current_node);
 
     reverse(path_found.begin(), path_found.end());    // reverse "PATH_FOUND" vector
 
