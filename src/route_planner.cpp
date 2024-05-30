@@ -121,7 +121,7 @@ void RoutePlanner::AStarSearch() {
     
     //AddNeighbors(start_node);      // MARKS starting node (visited) & ADDS "start_node" to "open_list"
 
-    AddNeighbors(current_node);    // MARKS current node (visited) & ADDS "current_node" to "open_list"        CHECKS IF GOAL WAS REACHED (maybe?)
+    AddNeighbors(current_node);    // MARKS starting node (visited) & ADDS "start_node" to "open_list"
 
     while (open_list.size() > 0)   // checks if open_list vector is NOT EMPTY
     {
@@ -133,6 +133,6 @@ void RoutePlanner::AStarSearch() {
             break;      // Exits while loop
         }
         
-        AddNeighbors(current_node);    // if goal NOT REACHED, checks next node
+        AddNeighbors(current_node);    // if goal NOT REACHED, checks next node        MARKS current node (visited) & ADDS "current_node" to "open_list"        CHECKS IF GOAL WAS REACHED
     }
 }
