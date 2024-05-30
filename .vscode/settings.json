@@ -12,7 +12,8 @@
         "xtree": "cpp",
         "xutility": "cpp",
         "xiosbase": "cpp",
-        "limits": "cpp"
+        "limits": "cpp",
+        "algorithm": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

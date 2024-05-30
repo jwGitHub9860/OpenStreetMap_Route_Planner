@@ -60,13 +60,8 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 // - Remove that node from the open_list.
 // - Return the pointer.
 
-bool Compare(RouteModel::Node* node_1, RouteModel::Node* node_2)    // compares f-values of two nodes
-{
-    return (node_1->g_value + node_1->h_value) > (node_2->g_value + node_2->h_value);   // return f_1 > f_2             f_1 = g_1 + h_1             f_2 = g_2 + h_2
-}
-
 RouteModel::Node *RoutePlanner::NextNode() {
-    sort(open_list.begin(), open_list.end(), Compare);    // sorts two-dimensional vector of ints in DESCENDING order useing Compare function to determine sorting order           -> - FOR POINTERS       . - FOR ACTUAL VALUE ITSELF
+    sort(open_list.begin(), open_list.end(), [](RouteModel::Node* node_1, RouteModel::Node* node_2){return (node_1->g_value + node_1->h_value) > (node_2->g_value + node_2->h_value);});    // sorts two-dimensional vector of ints in DESCENDING order using Compare function to determine sorting order           -> - FOR POINTERS       . - FOR ACTUAL VALUE ITSELF
 
     RouteModel::Node* low_sum_node = open_list.back();  // WANT LAST ELEMENT (pointer to node in list with LOWEST SUM)          'end()' - returns POINTER          'back()' - returns LAST ELEMENT
 
@@ -95,16 +90,17 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     while (c != start_node)  // iterate through nodes (current_node) until start_node        start_node is a POINTER        MUST COMPARE "POINTER" WITH "POINTER"
     {
         path_found.emplace_back(*c);        // adds "current_node" ITSELF to "path_found"        'emplace_back()' adds NEW node DIRECTLY into "path_found" vector        'push_back()' adds EXISTING node into container        line meaning ---> path_found.push_back(current_node);
+        RouteModel::Node *p = c->parent;    // puts 'c->parent' into POINTER        current_node LOCATION -> parent
 
-        distance += c->distance(c->parent);  // adds distance from node to parent to "distance"        current_node LOCATION -> parent
+        distance += c->distance(*p);  // adds distance from node to parent to "distance"        'distance()' will ONLY take Pointer, NOT take 'c->parent'
         c = c->parent;  // changes "current_node" LOCATION to "parent_node" LOCATION
     }
 
     path_found.push_back(*c);        // adds EXISTING "current_nodes" to "path_found"        'push_back()' adds EXISTING node into container        'emplace_back()' adds NEW node DIRECTLY into "path_found" vector        line meaning ---> path_found.push_back(current_node);
-    
+
     reverse(path_found.begin(), path_found.end());    // reverse "PATH_FOUND" vector
 
-    distance *= m_Model.MetricScale(); // Multiply the distance by the scale of the map to get meters.
+    distance *= m_Model.MetricScale(); // Multiply the distance by the scale of the map to get meters.      FIND DISTANCE FIRST BEFORE REVERSING VECTOR
     return path_found;
 
 }
@@ -121,14 +117,16 @@ void RoutePlanner::AStarSearch() {
     RouteModel::Node *current_node = nullptr;
 
     // TODO: Implement your solution here.    
-    current_node = start_node;   // initializes current_node		'open_list' vector ALREADY INTIALIZED
-    
-    //AddNeighbors(start_node);      // MARKS starting node (visited) & ADDS "start_node" to "open_list"
 
-    AddNeighbors(current_node);    // MARKS starting node (visited) & ADDS "start_node" to "open_list"
+    // Add "start_node" to "open_list" & Mark as visited ONLY		BECAUSE		"start_node" does NOT have a "parent node", "h_value", or "g_value"
+    open_list.push_back(start_node);
+    start_node->visited = true;
+
+    current_node = start_node;   // initializes current_node		'open_list' vector ALREADY INTIALIZED
 
     while (open_list.size() > 0)   // checks if open_list vector is NOT EMPTY
     {
+        AddNeighbors(current_node);    // MARKS current node (visited) & ADDS "current_node" to "open_list"        CHECKS IF GOAL WAS REACHED        if goal NOT REACHED, checks next node
         current_node = NextNode();     // sorts "open_list{}" & returns next node
 
         if (current_node->distance(*end_node) == 0)  // CHECKS IF GOAL WAS REACHED        using distance (equation) between current_node and end_node
@@ -136,7 +134,5 @@ void RoutePlanner::AStarSearch() {
             m_Model.path = ConstructFinalPath(end_node);    // stores final path in m_Model.path & returns FINAL PATH
             break;      // Exits while loop
         }
-        
-        AddNeighbors(current_node);    // if goal NOT REACHED, checks next node        MARKS current node (visited) & ADDS "current_node" to "open_list"        CHECKS IF GOAL WAS REACHED
     }
 }
